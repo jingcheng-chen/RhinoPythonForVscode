@@ -3,10 +3,10 @@
   "displayName": "RhinoPython",
   "icon": "image/logo.png",
   "description": "A Visual Studio Code extension to program IronPython for rhino.",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "publisher": "designtoproduction",
   "engines": {
-    "vscode": "^1.22.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
@@ -17,10 +17,6 @@
     "IronPython",
     "PythonScript",
     "RhinoScript"
-  ],
-  "activationEvents": [
-    "onCommand:extension.CodeSender",
-    "onCommand:extension.CodeSenderReset"
   ],
   "main": "./out/extension",
   "contributes": {
@@ -65,15 +61,20 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "tslint": "^5.8.0",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.14.2",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "mocha": "^11.7.1",
+    "typescript": "^5.5.2"
   },
   "repository": {
     "type": "git",

@@ -2,17 +2,19 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as net from 'net';
+import * as fs from 'fs';
+import * as os from 'os';
 // init an outputchannel
-var outputChannel = vscode.window.createOutputChannel('RhinoPython');
+const outputChannel = vscode.window.createOutputChannel('RhinoPython');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   // send the messgage to Rhino
-  var isRunning = false;
-  var net = require('net');
+  let isRunning = false;
 
-  var portNumber = 614;
+  const portNumber = 614;
 
   function SendToRhino(messgage: string) {
     const client = net.connect({ port: portNumber }, () => {
@@ -27,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     client.on('data', function (data: any) {
-      let info: string = data.toString();
+      const info: string = data.toString();
       outputChannel.append(info);
       client.end();
     });
@@ -62,12 +64,12 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     // check if editor is open
-    let editor = vscode.window.activeTextEditor;
+    const editor = vscode.window.activeTextEditor;
     if (!editor) {
       vscode.window.showWarningMessage('No code detected.');
       return;
     } else {
-      let text = editor.document.getText();
+      const text = editor.document.getText();
 
       if (!text) {
         vscode.window.showWarningMessage('No code detected.');
@@ -75,24 +77,22 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // initialize filesystem, operation system, and socket
-      var fs = require('fs');
-      var os = require('os');
 
       // check if reset engine
-      let reset = vscode.workspace.getConfiguration('RhinoPython').ResetAndRun;
+      const reset = vscode.workspace.getConfiguration('RhinoPython').ResetAndRun;
 
       // check if it is temp file, if yes then save to a temp file
-      let temp = editor.document.isUntitled;
-      let run = true;
+      const temp = editor.document.isUntitled;
+      const run = true;
       if (temp) {
-        var tmpfolder = os.tmpdir();
-        let filename = tmpfolder + '\\TempScript.py';
+        const tmpfolder = os.tmpdir();
+        const filename = tmpfolder + '\\TempScript.py';
         fs.writeFileSync(filename, text);
-        let msgObject = JSON.stringify({ reset, temp, filename, run });
+        const msgObject = JSON.stringify({ reset, temp, filename, run });
         SendToRhino(msgObject);
       } else {
-        let filename = editor.document.fileName;
-        let msgObject = JSON.stringify({ reset, temp, filename, run });
+        const filename = editor.document.fileName;
+        const msgObject = JSON.stringify({ reset, temp, filename, run });
         await editor.document.save();
         SendToRhino(msgObject);
       }
@@ -103,11 +103,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   // register reset command
   disposable = vscode.commands.registerCommand('extension.CodeSenderReset', () => {
-    let run = false;
-    let filename = '';
-    let temp = true;
-    let reset = true;
-    let msgObject = JSON.stringify({ reset, temp, filename, run });
+    const run = false;
+    const filename = '';
+    const temp = true;
+    const reset = true;
+    const msgObject = JSON.stringify({ reset, temp, filename, run });
     SendToRhino(msgObject);
   });
 
