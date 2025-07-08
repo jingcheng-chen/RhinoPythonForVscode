@@ -5,6 +5,7 @@
   "description": "A Visual Studio Code extension to program IronPython for rhino.",
   "version": "0.2.0",
   "publisher": "designtoproduction",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -19,6 +20,10 @@
     "RhinoScript"
   ],
   "main": "./out/extension",
+  "activationEvents": [
+    "onCommand:extension.CodeSender",
+    "onCommand:extension.CodeSenderReset"
+  ],
   "contributes": {
     "commands": [
       {
